@@ -1,3 +1,6 @@
-﻿  Game.cpp
-  Pang.vcxproj -> E:\CS\Practice\Pang\Debug\Pang.exe
-  Pang.vcxproj -> E:\CS\Practice\Pang\Debug\Pang.pdb (Partial PDB)
+﻿  stdafx.cpp
+  Pang.cpp
+  Game.cpp
+  Generating Code...
+  Pang.vcxproj -> E:\CS\SFML\Pang\Debug\Pang.exe
+  Pang.vcxproj -> E:\CS\SFML\Pang\Debug\Pang.pdb (Partial PDB)
