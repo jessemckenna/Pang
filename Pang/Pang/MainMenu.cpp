@@ -6,9 +6,9 @@
 MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window)
 {
 	// Load menu image from file and assign to sprite
-	sf::Image image;
-	image.loadFromFile("images/mainmenu.png");
-	sf::Sprite sprite(image);
+	sf::Texture texture;
+	texture.loadFromFile("Images/mainmenu.png");
+	sf::Sprite sprite(texture);
 
 	// TODO: Set up clickable regions
 

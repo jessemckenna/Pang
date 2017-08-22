@@ -12,6 +12,9 @@ private:
 	static bool IsExiting();
 	static void GameLoop();
 
+	static void ShowSplashScreen();
+	static void ShowMenu();
+
 	// Enum data type for game state
 	enum GameState { Uninitialized, ShowingSplash, Paused,
 			ShowingMenu, Playing, Exiting };

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
+#include "MainMenu.h"
+#include "SplashScreen.h"
 
 // --- Start ---
 // Open game window, run game loop, close game window
@@ -14,7 +16,7 @@ void Game::Start()
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "Pang!");
 	
 	// Switch game to Playing state and loop until game is in Exiting state
-	_gameState = Game::Playing;
+	_gameState = Game::ShowingSplash;
 
 	while (!IsExiting())
 	{
@@ -38,34 +40,80 @@ bool Game::IsExiting()
 // Execute the game, set game state to Exiting when window closed
 void Game::GameLoop()
 {
-	sf::Event currentEvent;
-
-	// If an event exists, return true and assign to currentEvent;
-	// multiple events can be in queue at a time, so will iterate over all
-	// available events until there are none left to process
-	while (_mainWindow.pollEvent(currentEvent))
+	// Execute based on game state; only one state can be active at a time
+	switch (_gameState)
 	{
-		// Execute based on game state; only one state can be active at a time
-		switch (_gameState)
+		case Game::ShowingSplash:
 		{
-			case Game::Playing:
+			ShowSplashScreen();
+			break;
+		}
+
+		case Game::ShowingMenu:
+		{
+			ShowMenu();
+			break;
+		}
+
+		case Game::Playing:
+		{
+			sf::Event currentEvent;
+
+			// If an event exists, return true and assign to currentEvent;
+			// multiple events can be in queue at a time, so will iterate over
+			// all available events until there are none left to process
+			while (_mainWindow.pollEvent(currentEvent))
 			{
-				// Clear mainWindow to red color
-				_mainWindow.clear(sf::Color(255, 0, 0));
-				
+				// Clear mainWindow to solid color
+				_mainWindow.clear(sf::Color(0, 0, 0));
+
 				// Display mainWindow on screen
 				_mainWindow.display();
 
 				// If user closes window, set game state to Exiting
 				if (currentEvent.type == sf::Event::Closed)
 					_gameState = Game::Exiting;
-				
+
+				// If user presses escape, return to main menu
+				if (currentEvent.type == sf::Event::KeyPressed)
+				{
+					if (currentEvent.key.code == sf::Keyboard::Escape)
+						ShowMenu();
+				}
+
 				break;
 			}
 		}
 	}
 }
 
+// --- ShowSplashScreen ---
+// Call SplashScreen member function Show, set game state to ShowingMenu
+void Game::ShowSplashScreen()
+{
+	SplashScreen splashScreen;
+	splashScreen.Show(_mainWindow);
+	_gameState = Game::ShowingMenu;
+}
+
+// --- ShowMenu ---
+// Call MainMenu member function Show, set game state based on return value
+void Game::ShowMenu()
+{
+	MainMenu mainMenu;
+	MainMenu::MenuResult result = mainMenu.Show(_mainWindow);
+
+	switch(result)
+	{
+		case MainMenu::Exit:
+			_gameState = Game::Exiting;
+			break;
+		case MainMenu::Play:
+			_gameState = Game::Playing;
+			break;
+	}
+}
+
 // Initialize member variables manually; needed because they are static
-Game::GameState Game::_gameState = Uninitialized; // default state Uninitialized
+Game::GameState Game::_gameState = Uninitialized; // default to Uninitialized
 sf::RenderWindow Game::_mainWindow;

@@ -3,16 +3,16 @@
 
 void SplashScreen::Show(sf::RenderWindow& renderWindow)
 {
-	sf::Image image;
+	sf::Texture texture;
 	
-	// Load splash screen image from disk, return if not found
-	if (image.loadFromFile("images/SplashScreen.png") != true)
+	// Load splash screen texture from disk, return if not found
+	if (texture.loadFromFile("Images/splashscreen.png") != true)
 		return;
 
-	// Create a sprite from image
-	// Images are essentially assets and are not displayed;
+	// Create a sprite from texture
+	// Textures are essentially assets and are not displayed;
 	// sprites are what is actually displayed onscreen
-	sf::Sprite sprite(image);
+	sf::Sprite sprite(texture);
 
 	renderWindow.draw(sprite); // draw sprite to renderWindow
 	renderWindow.display(); // display renderWindow on screen
