@@ -1,6 +1,8 @@
 #pragma once // include guard
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
+#include "PlayerPaddle.h"
+#include "GameObjectManager.h"
 
 class Game
 {
@@ -22,4 +24,5 @@ private:
 	// Member variables
 	static GameState _gameState;
 	static sf::RenderWindow _mainWindow;
+	static GameObjectManager _gameObjectManager;
 };

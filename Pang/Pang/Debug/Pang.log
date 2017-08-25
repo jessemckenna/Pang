@@ -1,4 +1,8 @@
-﻿  MainMenu.cpp
-cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
+﻿  GameObjectManager.cpp
+  Game.cpp
+  Generating Code...
+  Compiling...
+  Pang.cpp
+  Generating Code...
   Pang.vcxproj -> E:\CS\SFML\Pang\Debug\Pang.exe
   Pang.vcxproj -> E:\CS\SFML\Pang\Debug\Pang.pdb (Partial PDB)
