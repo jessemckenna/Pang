@@ -13,12 +13,12 @@ void Game::Start()
 		return;
 
 	// Create main window at 1024x768 resolution, 32 bpp color, title "Pang!"
-	_mainWindow.create(sf::VideoMode(1024, 768, 32), "Pang!");
+	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Pang!");
 	
 	// Load player paddle and set its position, then add to _gameObjectManager
 	PlayerPaddle* player1 = new PlayerPaddle();
 	player1->Load("images/paddle.png");
-	player1->SetPosition((1024 / 2) - 45, 700);
+	player1->SetPosition((SCREEN_WIDTH / 2), 700);
 
 	_gameObjectManager.Add("Paddle1", player1);
 
@@ -31,6 +31,12 @@ void Game::Start()
 	}
 
 	_mainWindow.close();
+}
+
+// --- GetWindow ---
+sf::RenderWindow& Game::GetWindow()
+{
+	return _mainWindow;
 }
 
 // --- IsExiting ---
@@ -72,7 +78,8 @@ void Game::GameLoop()
 			// Clear mainWindow to solid color
 			_mainWindow.clear(sf::Color(0, 0, 0));
 
-			// Draw player 1 paddle to mainWindow
+			// Update game objects and draw to main window
+			_gameObjectManager.UpdateAll();
 			_gameObjectManager.DrawAll(_mainWindow);
 
 			// Display mainWindow on screen

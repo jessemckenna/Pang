@@ -15,6 +15,6 @@
 
 #include <map>
 #include <iostream>
-#include <cassert>
+#include <cassert> // enables assert
 #include <list>
 #include <string>

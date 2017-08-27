@@ -54,6 +54,12 @@ int GameObjectManager::GetObjectCount() const
 	return _gameObjects.size();
 }
 
+// --- GetClock ---
+sf::Clock& GameObjectManager::GetClock()
+{
+	return _clock;
+}
+
 // --- Get ---
 // Return the VisibleGameObject* value (in a map) associated with the string
 // key provided as argument
@@ -93,3 +99,28 @@ void GameObjectManager::DrawAll(sf::RenderWindow& renderWindow)
 		itr++;
 	}
 }
+
+// --- UpdateAll ---
+// Loop through all items in map _gameObjects and call VisibleGameObject's
+// Update method for each
+void GameObjectManager::UpdateAll()
+{
+	// Create constant iterator "itr" and set to start of map
+	std::map<std::string, VisibleGameObject*>::const_iterator itr
+		= _gameObjects.begin();
+
+	// Restart the frame clock and set timeDelta to the elapsed time in seconds
+	float timeDelta = GetClock().restart().asSeconds();
+
+	// Iterate through map until reaching _gameObjects.end()
+	while (itr != _gameObjects.end())
+	{
+		// Update the VisibleGameObject* value of each pair based on elapsed
+		// time, using the Update method from the VisibleGameObject class
+		itr->second->Update(timeDelta);
+		itr++;
+	}
+}
+
+// Initialize member variables manually; needed because they are static
+sf::Clock GameObjectManager::_clock;

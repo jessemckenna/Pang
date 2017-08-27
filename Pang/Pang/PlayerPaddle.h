@@ -9,4 +9,13 @@ class PlayerPaddle : public VisibleGameObject
 public:
 	PlayerPaddle(); // default constructor
 	~PlayerPaddle(); // destructor
+
+	void Update(float elapsedTime); // override base class Update method
+	void Draw(sf::RenderWindow &rw);
+
+	float GetVelocity() const;
+
+private:
+	float _velocity; // -- left ++ right
+	float _maxVelocity;
 };

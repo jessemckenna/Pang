@@ -13,9 +13,11 @@ public:
 	
 	// Member functions ending in const cannot change any member variables
 	int GetObjectCount() const;
+	static sf::Clock& GetClock();
 	VisibleGameObject* Get(std::string name) const;
 	
 	void DrawAll(sf::RenderWindow& renderWindow);
+	void UpdateAll();
 
 private:
 	// Member variables
@@ -36,4 +38,6 @@ private:
 			delete p.second;
 		}
 	};
+
+	static sf::Clock _clock;
 };
