@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "MainMenu.h"
 #include "SplashScreen.h"
+#include "SFMLSoundProvider.h"
+#include "ServiceLocator.h"
 
 // --- Start ---
 // Open game window, run game loop, close game window
@@ -15,12 +17,25 @@ void Game::Start()
 	// Create main window at 1024x768 resolution, 32 bpp color, title "Pang!"
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Pang!");
 	
+	// Initialize sound service and play background music
+	SFMLSoundProvider soundProvider;
+	ServiceLocator::RegisterServiceLocator(&soundProvider);
+	ServiceLocator::GetAudio()->PlaySong("audio/sleep.wav", false);
+	
 	// Load player paddle and set its position, then add to _gameObjectManager
 	PlayerPaddle* player1 = new PlayerPaddle();
-	player1->Load("images/paddle.png");
 	player1->SetPosition((SCREEN_WIDTH / 2), 700);
-
 	_gameObjectManager.Add("Paddle1", player1);
+
+	// Load AI paddle and set its position, then add to _gameObjectManager
+	AIPaddle* player2 = new AIPaddle();
+	player2->SetPosition((SCREEN_WIDTH / 2), 40);
+	_gameObjectManager.Add("Paddle2", player2);
+
+	// Load ball and set its position, then add to _gameObjectManager
+	GameBall* ball = new GameBall();
+	ball->SetPosition((SCREEN_WIDTH / 2), (SCREEN_HEIGHT/2)-15);
+	_gameObjectManager.Add("Ball", ball);
 
 	// Switch game to Playing state and loop until game is in Exiting state
 	_gameState = Game::ShowingSplash;
@@ -37,6 +52,12 @@ void Game::Start()
 sf::RenderWindow& Game::GetWindow()
 {
 	return _mainWindow;
+}
+
+// --- GetGameObjectManager ---
+const GameObjectManager& Game::GetGameObjectManager()
+{
+	return _gameObjectManager;
 }
 
 // --- IsExiting ---
@@ -57,7 +78,7 @@ void Game::GameLoop()
 	// at a time
 	sf::Event currentEvent;
 	_mainWindow.pollEvent(currentEvent);
-
+	
 	// Execute based on game state; only one state can be active at a time
 	switch (_gameState)
 	{

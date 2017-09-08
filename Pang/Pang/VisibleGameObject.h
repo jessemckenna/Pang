@@ -15,6 +15,11 @@ public:
 	
 	virtual void SetPosition(float x, float y);
 	virtual sf::Vector2f GetPosition() const;
+	
+	virtual float GetWidth() const;
+	virtual float GetHeight() const;
+	virtual sf::Rect<float> GetBoundingRect() const;
+
 	virtual bool IsLoaded() const;
 
 // A protected member is only accessible to its own class and derived classes

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MainMenu.h"
+#include "ServiceLocator.h"
 
 // --- Show ---
 // Create menu buttons, display main menu, and call GetMenuResponse for choice
@@ -53,6 +54,10 @@ MainMenu::MenuResult MainMenu::GetMenuResponse(sf::RenderWindow& window)
 			{
 				return HandleClick(menuEvent.mouseButton.x,
 					menuEvent.mouseButton.y);
+
+				// Stop playing menu music
+				if (ServiceLocator::GetAudio()->IsSongPlaying())
+					ServiceLocator::GetAudio()->StopAllSounds();
 			}
 			if (menuEvent.type == sf::Event::Closed)
 			{

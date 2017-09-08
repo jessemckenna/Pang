@@ -5,7 +5,9 @@
 // --- PlayerPaddle ---
 // Default constructor; set _velocity to 0 and _maxVelocity to 600.0,
 // load paddle texture, set sprite origin to center of texture
-PlayerPaddle::PlayerPaddle() : _velocity(0), _maxVelocity(600.0f)
+PlayerPaddle::PlayerPaddle() :
+	_velocity(0),
+	_maxVelocity(600.0f)
 {
 	Load("images/paddle.png");
 	assert(IsLoaded()); // check IsLoaded() is true, else terminate program
@@ -30,13 +32,21 @@ void PlayerPaddle::Update(float elapsedTime) // override base class Update
 	{
 		_velocity -= 3.0f; // move left
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		_velocity += 3.0f; // move right
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
 		_velocity = 0.0f; // stop movement
+	}
+	else if (_velocity < 0)
+	{
+		_velocity += 0.4f; // decay speed while no button is pressed, moving left
+	}
+	else if (_velocity > 0)
+	{
+		_velocity -= 0.4f; // decay speed while no button is pressed, moving right
 	}
 
 	// Limit velocity to maxVelocity
@@ -51,8 +61,10 @@ void PlayerPaddle::Update(float elapsedTime) // override base class Update
 	sf::Vector2f pos = this->GetPosition();
 
 	// If paddle reaches edge of screen
-	if (pos.x < GetSprite().getLocalBounds().width / 2 ||
-		pos.x > (Game::SCREEN_WIDTH - GetSprite().getLocalBounds().width / 2))
+	if ((pos.x < GetSprite().getLocalBounds().width / 2
+		&& _velocity < 0) ||
+		(pos.x > (Game::SCREEN_WIDTH - GetSprite().getLocalBounds().width / 2)
+		&& _velocity > 0))
 	{
 		// Bounce by current velocity in other direction
 		_velocity = -_velocity;
@@ -64,14 +76,13 @@ void PlayerPaddle::Update(float elapsedTime) // override base class Update
 }
 
 // --- Draw ---
-// 
+// Draw paddle to current render window
 void PlayerPaddle::Draw(sf::RenderWindow &rw)
 {
 	VisibleGameObject::Draw(rw);
 }
 
 // --- GetVelocity ---
-// 
 float PlayerPaddle::GetVelocity() const
 {
 	return _velocity;

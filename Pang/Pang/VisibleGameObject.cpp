@@ -4,7 +4,8 @@
 // --- VisibleGameObject ---
 // Default constructor; sets _isLoaded to false
 // This syntax is slightly more efficient than "_isLoaded = false;" in the body
-VisibleGameObject::VisibleGameObject() : _isLoaded(false)
+VisibleGameObject::VisibleGameObject() :
+	_isLoaded(false)
 {
 }
 
@@ -73,6 +74,24 @@ sf::Vector2f VisibleGameObject::GetPosition() const
 
 	// Return a temporary blank Vector2f by calling constructor in return
 	return sf::Vector2f();
+}
+
+// --- GetWidth ---
+float VisibleGameObject::GetWidth() const
+{
+	return _sprite.getLocalBounds().width;
+}
+
+// --- GetHeight ---
+float VisibleGameObject::GetHeight() const
+{
+	return _sprite.getLocalBounds().height;
+}
+
+// --- GetBoundingRect ---
+sf::Rect<float> VisibleGameObject::GetBoundingRect() const
+{
+	return _sprite.getGlobalBounds();
 }
 
 // --- IsLoaded ---
