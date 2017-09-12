@@ -7,7 +7,7 @@
 // Default constructor
 AIPaddle::AIPaddle() : 
 	_velocity(0.0f), 
-	_maxVelocity(600.0f)
+	_maxVelocity(400.0f)
 {
 	Load("images/paddle.png");
 	assert(IsLoaded()); // check IsLoaded() is true, else terminate program
@@ -25,7 +25,7 @@ AIPaddle::~AIPaddle()
 }
 
 // --- Update ---
-// Move paddle according to ball position; called every frame
+// Move paddle according to ball position when ball is near; called every frame
 void AIPaddle::Update(float elapsedTime)
 {
 	// Get ball position
@@ -35,9 +35,12 @@ void AIPaddle::Update(float elapsedTime)
 	sf::Vector2f ballPosition = gameBall->GetPosition();
 
 	// Paddle AI based on ball position
-	if (GetPosition().x - 20 < ballPosition.x)
+	// Note: paddle only moves when ball is on its side, to make game easier
+	if (GetPosition().x + 20 < ballPosition.x 
+		&& ballPosition.y < Game::SCREEN_HEIGHT / 2) // over 20 px left of ball
 		_velocity += 15.0f;
-	else if (GetPosition().x + 20 > ballPosition.x)
+	else if (GetPosition().x - 20 > ballPosition.x
+		&& ballPosition.y < Game::SCREEN_HEIGHT / 2) // over 20 px right of ball
 		_velocity -= 15.0f;
 	else
 		_velocity = 0.0f;

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "SFMLSoundProvider.h"
-#include <iostream>
 
 // --- SFMLSoundProvider ---
 // Standard constructor
@@ -31,7 +30,6 @@ void SFMLSoundProvider::PlaySound(std::string filename)
 		try
 		{
 			// Try to set the first available channel to a sound from the cache
-			std::cout << "Now playing " << filename << " on channel " << availChannel << std::endl;
 			_currentSounds[availChannel] = _soundFileCache.GetSound(filename);
 			_currentSounds[availChannel].play();
 		}

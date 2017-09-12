@@ -145,6 +145,11 @@ void Game::ShowMenu()
 			break;
 		case MainMenu::Play:
 			_gameState = Game::Playing;
+			
+			// Restart game clock once game begins to prevent clock from
+			// running during main menu (which causes the ball to jump)
+			GameObjectManager::GetClock().restart();
+			
 			break;
 	}
 }

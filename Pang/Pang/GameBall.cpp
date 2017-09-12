@@ -6,7 +6,7 @@
 // --- GameBall ---
 // Default constructor
 GameBall::GameBall() :
-	_velocity(230.0f),
+	_velocity(300.0f),
 	_elapsedTimeSinceStart(0.0f)
 {
 	Load("images/ball.png");
@@ -28,48 +28,33 @@ GameBall::~GameBall()
 // Move ball; called every frame
 void GameBall::Update(float elapsedTime)
 {
-	
 	// Delay game from starting until 3 seconds have passed
 	_elapsedTimeSinceStart += elapsedTime;
 	if (_elapsedTimeSinceStart < 3.0f)
 		return;
-		
-	// Determine distance to be moved
+
+	// Determine base distance to be moved
 	float moveAmount = _velocity * elapsedTime;
 	
-	// Determine distance to be moved in terms of x and y coordinates
+	// Convert base distance to be moved into distances on x and y axes
 	float moveByX = LinearVelocityX(_angle) * moveAmount; // adj = cos(t) * hyp
 	float moveByY = LinearVelocityY(_angle) * moveAmount; // opp = sin(t) * hyp
-	
-	// Ball collides with sides of screen
-	if (GetPosition().x + moveByX <= 0 + GetWidth() / 2
-		|| GetPosition().x + GetWidth() / 2 + moveByX >= Game::SCREEN_WIDTH)
-	{
-		_angle = 360.0f - _angle; // ricochet
-		
-		// Tweak angle if ball hits wall straight on to keep the game moving
-		if (_angle > 260.0f && _angle < 280.0f)
-			_angle += 20.0f;
-		if (_angle > 80.0f && _angle < 100.0f)
-			_angle += 20.0f;
-		
-		moveByX = -moveByX; // change direction
-
-		// Play sound for ball hitting wall
-		ServiceLocator::GetAudio()->PlaySound("audio/plop.wav");
-	}
 	
 	// Create pointer player1, set to location of Paddle1 in GameObjectManager;
 	// cast to PlayerPaddle* because expression returns a VisibleGameObject*
 	PlayerPaddle* player1 = dynamic_cast<PlayerPaddle*>
 		(Game::GetGameObjectManager().Get("Paddle1"));
 	
+	AIPaddle* player2 = dynamic_cast<AIPaddle*>
+		(Game::GetGameObjectManager().Get("Paddle2"));
+
 	// If dynamic_cast successful, calculate and execute ball movement
-	if (player1 != NULL)
+	if (player1 != NULL && player2 != NULL)
 	{
-		// Create rectangle p1BB to represent the player1 paddle's bounding box
+		// Create rectangles p1BB and p2BB to represent paddle bounding boxes
 		sf::Rect<float> p1BB = player1->GetBoundingRect();
-		
+		sf::Rect<float> p2BB = player2->GetBoundingRect();
+
 		// Ball collides with player1 paddle
 		if (p1BB.intersects(GetBoundingRect()))
 		{
@@ -109,24 +94,79 @@ void GameBall::Update(float elapsedTime)
 					_angle = _angle - 360.0f; // keep angle between 0 and 360
 			}
 
-			_velocity += 5.0f; // slightly increase speed on each reflect
+			_velocity += 20.0f; // slightly increase speed on each reflect
 
 			// Play sound for ball hitting paddle
 			ServiceLocator::GetAudio()->PlaySound("audio/beeep.wav");
 		}
 		
-		// Ball collides with top of screen
-		if (GetPosition().y - GetHeight() / 2 <= 0)
+		// Ball collides with player2 paddle
+		if (p2BB.intersects(GetBoundingRect()))
 		{
-			_angle = 180 - _angle; // ricochet
+			_angle = 360.0f - (_angle - 180.0f); // ricochet
+
+			if (_angle > 360.0f)
+				_angle -= 360.0f; // keep angle between 0 and 360
+
 			moveByY = -moveByY; // change direction
+
+			// Make sure ball isn't inside paddle
+			if ((GetBoundingRect().top) <
+				player2->GetBoundingRect().top + player2->GetBoundingRect().height)
+			{
+				SetPosition(GetPosition().x,
+					player2->GetBoundingRect().top + 
+					player2->GetBoundingRect().height + GetHeight() / 2 + 1);
+			}
+
+			// Tweak ball angle based on velocity (to add variety to gameplay)
+			float AIVelocity = player2->GetVelocity();
+
+			if (AIVelocity < 0)
+			{
+				// Moving left
+				_angle -= 20.0f; // intensify angle
+
+				if (_angle < 0)
+					_angle = 360.0f - _angle; // keep angle between 0 and 360
+			}
+			else if (AIVelocity > 0)
+			{
+
+				// Moving right
+				_angle += 20.0f; // intensify angle
+
+				if (_angle > 360.0f)
+					_angle = _angle - 360.0f; // keep angle between 0 and 360
+			}
+
+			_velocity += 5.0f; // slightly increase speed on each reflect
+
+			// Play sound for ball hitting paddle
+			ServiceLocator::GetAudio()->PlaySound("audio/beeep.wav");
+		}
+
+		// Ball collides with sides of screen
+		if (GetPosition().x + moveByX <= 0 + GetWidth() / 2
+			|| GetPosition().x + GetWidth() / 2 + moveByX >= Game::SCREEN_WIDTH)
+		{
+			_angle = 360.0f - _angle; // ricochet
+
+			// Tweak angle if ball hits wall straight on to keep the game moving
+			if (_angle > 260.0f && _angle < 280.0f)
+				_angle += 20.0f;
+			if (_angle > 80.0f && _angle < 100.0f)
+				_angle += 20.0f;
+
+			moveByX = -moveByX; // change direction
 
 			// Play sound for ball hitting wall
 			ServiceLocator::GetAudio()->PlaySound("audio/plop.wav");
 		}
 
-		// If ball reaches bottom of screen, reset position and randomize angle
-		if (GetPosition().y + GetHeight() / 2 + moveByY >= Game::SCREEN_HEIGHT)
+		// Ball hits top or bottom of screen: reset position, randomize angle
+		if (GetPosition().y - GetHeight() / 2 <= 0 || 
+			GetPosition().y + GetHeight() / 2 + moveByY >= Game::SCREEN_HEIGHT)
 		{
 			GetSprite().setPosition
 				(Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT / 2);
