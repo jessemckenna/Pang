@@ -30,6 +30,9 @@
     <ClInclude Include="SoundFileCache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IAudioProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

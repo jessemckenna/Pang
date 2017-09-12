@@ -40,15 +40,17 @@ sf::Sound SoundFileCache::GetSound(std::string soundName) const
 		}
 
 		// Insert loaded SoundBuffer into _sounds cache
-		std::map<std::string,sf::SoundBuffer*>::iterator res = 
-			_sounds.insert(std::pair<std::string, sf::SoundBuffer*>
+		// map.insert returns a pair whose first element is an iterator
+		// pointing to the new element we just inserted; here we assign .first
+		// to itr, so itr points to the new element in the map
+		itr = _sounds.insert(std::pair<std::string, sf::SoundBuffer*>
 			(soundName, soundBuffer)).first;
-
-		// Return a Sound object whose buffer is set to cached SoundBuffer
-		sf::Sound sound;
-		sound.setBuffer(*res->second);
-		return sound;
 	}
+
+	// Return a Sound object whose buffer is set to cached SoundBuffer
+	sf::Sound sound;
+	sound.setBuffer(*itr->second);
+	return sound;
 }
 
 // --- GetSong ---

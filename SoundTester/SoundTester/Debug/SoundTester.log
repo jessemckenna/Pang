@@ -1,7 +1,3 @@
-﻿  stdafx.cpp
-  SoundTester.cpp
-  SoundFileCache.cpp
-  SFMLSoundProvider.cpp
-e:\cs\sfml\soundtester\soundtester\sfmlsoundprovider.h(4): fatal error C1083: Cannot open include file: 'IAudioProvider.h': No such file or directory
-  Generating Code...
-e:\cs\sfml\soundtester\soundtester\soundfilecache.cpp(52): warning C4715: 'SoundFileCache::GetSound': not all control paths return a value
+﻿  SoundFileCache.cpp
+  SoundTester.vcxproj -> E:\CS\SFML\SoundTester\Debug\SoundTester.exe
+  SoundTester.vcxproj -> E:\CS\SFML\SoundTester\Debug\SoundTester.pdb (Partial PDB)

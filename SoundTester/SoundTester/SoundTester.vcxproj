@@ -149,6 +149,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IAudioProvider.h" />
     <ClInclude Include="SFMLSoundProvider.h" />
     <ClInclude Include="SoundFileCache.h" />
     <ClInclude Include="stdafx.h" />
