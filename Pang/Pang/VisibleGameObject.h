@@ -25,11 +25,13 @@ public:
 // A protected member is only accessible to its own class and derived classes
 protected:
 	sf::Sprite& GetSprite();
+	sf::Text& GetText();
 
 private:
 	// Member variables
 	sf::Sprite _sprite;
 	sf::Texture _texture;
 	std::string _filename; // name of file loaded into _texture
+	sf::Text _text;
 	bool _isLoaded; // true when texture data has been loaded
 };

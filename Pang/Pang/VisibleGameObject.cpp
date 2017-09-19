@@ -107,3 +107,10 @@ sf::Sprite& VisibleGameObject::GetSprite()
 {
 	return _sprite;
 }
+
+// --- GetText ---
+// Method for derived classes to get access to inherited private _text member
+sf::Text& VisibleGameObject::GetText()
+{
+	return _text;
+}

@@ -1,3 +1,16 @@
-﻿  AIPaddle.cpp
+﻿  stdafx.cpp
+  VisibleGameObject.cpp
+  SplashScreen.cpp
+  SoundFileCache.cpp
+  ServiceLocator.cpp
+  SFMLSoundProvider.cpp
+  PlayerPaddle.cpp
+  Pang.cpp
+  MainMenu.cpp
+  GameObjectManager.cpp
+  GameBall.cpp
+  Game.cpp
+  AIPaddle.cpp
+  Generating Code...
   Pang.vcxproj -> E:\CS\SFML\Pang\Debug\Pang.exe
   Pang.vcxproj -> E:\CS\SFML\Pang\Debug\Pang.pdb (Partial PDB)
